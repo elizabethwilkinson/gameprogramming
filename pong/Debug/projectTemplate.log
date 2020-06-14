@@ -1,0 +1,8 @@
+﻿  main.cpp
+c:\users\notwe\source\repos\pong\main.cpp(183): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\notwe\source\repos\pong\main.cpp(184): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\notwe\source\repos\pong\main.cpp(188): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\notwe\source\repos\pong\main.cpp(189): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  ShaderProgram.cpp
+  Generating Code...
+  projectTemplate.vcxproj -> C:\Users\notwe\source\repos\pong\Debug\pong.exe
