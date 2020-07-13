@@ -1,0 +1,5 @@
+﻿  Entity.cpp
+  main.cpp
+c:\users\notwe\source\repos\riseofai\main.cpp(270): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  projectTemplate.vcxproj -> C:\Users\notwe\source\repos\riseOfAI\Debug\riseOfAI.exe
