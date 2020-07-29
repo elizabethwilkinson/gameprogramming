@@ -13,8 +13,8 @@ unsigned int level2_data[] =
  3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
  3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
  3, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
- 3, 1, 1, 1, 1, 1, 1, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0,
- 3, 2, 2, 2, 2, 2, 2, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
+ 3, 1, 1, 1, 1, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0,
+ 3, 2, 2, 2, 2, 2, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
 };
 
 void Level2::Initialize() {
@@ -28,7 +28,7 @@ void Level2::Initialize() {
 	// Initialize Player
 	state.player = new Entity();
 	state.player->entityType = PLAYER;
-	state.player->position = glm::vec3(5, 0, 0);
+	state.player->position = glm::vec3(2, 0, 0);
 	state.player->movement = glm::vec3(0);
 	state.player->acceleration = glm::vec3(0, -9.81f, 0); //free fall gravity
 	state.player->speed = 1.5f;
@@ -47,14 +47,9 @@ void Level2::Initialize() {
 	state.player->animRows = 8;
 
 	state.player->height = 1.0f;
-	state.player->width = 1.0f;
+	state.player->width = 0.5f;
 
 	state.player->jumpPower = 6.0f;
-
-	//music = Mix_LoadMUS("music.mp3");
-	//Mix_PlayMusic(music,-1); //loop forever (use 0 to play track just 1 time)
-	//Mix_VolumeMusic(MIX_MAX_VOLUME/2); //ranges 0 (mute) to 128 (max volume)
-	//Mix_HaltMusic();
 
 	//Initialize Enemies
 	state.enemies = new Entity[LEVEL2_ENEMY_COUNT];
@@ -68,29 +63,25 @@ void Level2::Initialize() {
 		state.enemies[i].height = 0.75;
 		state.enemies[i].speed = 1;
 		state.enemies[i].acceleration = glm::vec3(0, -9.81, 0);
-		state.enemies[i].isActive = false;
 	}
 
-	state.enemies[0].position = glm::vec3(4, -1.5, 0);
-	state.enemies[0].aiType = WAITANDGO;
-
-	/*state.enemies[1].position = glm::vec3(2.5, -1.5, 0);
-	state.enemies[1].aiType = JUMPER;
-	state.enemies[1].jumpPower = 3.0;
-
-	state.enemies[2].position = glm::vec3(1, -1.5, 0);
-	state.enemies[2].aiType = WALKER;*/
+	state.enemies[0].position = glm::vec3(12, 1.5, 0);
+	state.enemies[0].aiType = WALKER;
+	
 }
 
 void Level2::Update(float deltaTime) {
 	state.player->Update(deltaTime, state.player, state.enemies, LEVEL2_ENEMY_COUNT, state.map);
 
+	state.enemies->Update(deltaTime, state.player, state.enemies, LEVEL2_ENEMY_COUNT, state.map);
+
 	if (state.player->position.x >= 20) {
-		state.nextScene = 2;
+		state.nextScene = 3;
 	}
 }
 
 void Level2::Render(ShaderProgram *program) {
 	state.map->Render(program);
 	state.player->Render(program);
+	state.enemies->Render(program);
 }

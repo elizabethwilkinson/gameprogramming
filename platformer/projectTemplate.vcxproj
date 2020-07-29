@@ -87,7 +87,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;glew32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>C:\SDL\glew\lib\Release\Win32;C:\SDL\SDL2\lib\x86;C:\SDL\SDL2_image\lib\x86;C:\SD</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

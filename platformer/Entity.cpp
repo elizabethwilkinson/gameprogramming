@@ -190,10 +190,10 @@ void Entity::AIWaitAndGo(Entity *player) {
 		break;
 	case WALKING:
 		if (player->position.x < position.x) {
-			movement = glm::vec3(-1.0, 0, 0);
+			movement = glm::vec3(-0.5, 0, 0);
 		}
 		else {
-			movement = glm::vec3(1.0, 0, 0);
+			movement = glm::vec3(0.5, 0, 0);
 		}
 		break;
 	}
@@ -227,13 +227,11 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
 
 	position.y += velocity.y * deltaTime; // Move on Y
 	CheckCollisionsY(map);
-	CheckCollisionsY(objects, objectCount); // Fix if needed
 
 	position.x += velocity.x * deltaTime; // Move on X
 	CheckCollisionsX(map);
-	CheckCollisionsX(objects, objectCount); // Fix if needed
 
-	if (entityType == PLAYER || entityType == PLATFORM) {
+	if (entityType == PLAYER) { //animation
 		if (animIndices != NULL) {
 			if (glm::length(movement) != 0) {
 				animTime += deltaTime;
@@ -259,29 +257,39 @@ void Entity::Update(float deltaTime, Entity *player, Entity *objects, int object
 	}
 
 	if (entityType == PLAYER) {
-		//CheckCollisionsX(enemies, enemyCount);
-		//CheckCollisionsY(enemies, enemyCount);
+		CheckCollisionsX(objects, objectCount); 
+		CheckCollisionsY(objects, objectCount); // Fix if needed
+
+		if (position.y < -6.5) {
+			lives -= 1;
+			position = glm::vec3(2, 0, 0);
+			/*if (lives == 0) {
+				isActive = false;
+			}*/
+		}
 
 		if (lastCollision == ENEMY) {
 			if (killFlag) {
 				//defeat enemy
 				std::cout << "Left: " << collidedLeft << " ------------------" << "Right: " << collidedRight << "---------------------" << "Bottom: " << collidedBottom << "\n";
 				//enemies[lastKilled].isActive = false;
+				objects[lastKilled].isActive = false;
 				killFlag = false;
 			}
 			else if (collidedLeft || collidedRight) {
 				//player loses a life
 				std::cout << "Left: " << collidedLeft << " ------------------" << "Right: " << collidedRight << "---------------------" << "Bottom: " << collidedBottom << "\n";
-				lives--;
-				if (lives == 0) {
+				lives -= 1;
+				position = glm::vec3(2, 0, 0);
+				/*if (lives == 0) {
 					isActive = false;
-				}
+				}*/
 			}
 		}
 	}
 
 	if (entityType == ENEMY) {
-		AI(player); //akin to ProcessInput()
+		AI(player); 
 		if (jump) {
 			Jump();
 		}

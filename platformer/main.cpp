@@ -33,6 +33,7 @@ Criteria: (1) Menu screen: title, press enter to start
 #include "Level3.h"
 
 Mix_Music *music;
+Mix_Chunk *bounce;
 
 SDL_Window* displayWindow;
 
@@ -44,7 +45,7 @@ ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
 Scene *currentScene;
-Scene *sceneList[3];
+Scene *sceneList[4];
 
 void SwitchToScene(Scene *scene) {
 	currentScene = scene;
@@ -81,22 +82,26 @@ void Initialize() {
 
 	fontTextureID = Util::LoadTexture("pixel_font.png");
 
-	//music = Mix_LoadMUS("wallpaper.mp3");
+	music = Mix_LoadMUS("wallpaper.mp3");
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
-	//Mix_PlayMusic(music,-1); //loop forever (use 0 to play track just 1 time)
+	Mix_PlayMusic(music,-1); //loop forever (use 0 to play track just 1 time)
 	//Mix_VolumeMusic(MIX_MAX_VOLUME/2); //ranges 0 (mute) to 128 (max volume)
 	//Mix_HaltMusic();
 
-	//sceneList[0] = new Menu();
-	sceneList[0] = new Level1();
-	sceneList[1] = new Level2();
-	sceneList[2] = new Level3();
+	bounce = Mix_LoadWAV("birds040.wav");
+
+	sceneList[0] = new Menu();
+	sceneList[1] = new Level1();
+	sceneList[2] = new Level2();
+	sceneList[3] = new Level3();
 	SwitchToScene(sceneList[0]);
 }
 
 void ProcessInput() {
 	
-	currentScene->state.player -> movement = glm::vec3(0);
+	
+	currentScene->state.player->movement = glm::vec3(0);
+	
 
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
@@ -116,13 +121,14 @@ void ProcessInput() {
 				// Move the player right
 				break;
 
-			//case SDLK_RETURN:
-			//	//Start the game if on menu screen
-			//	gameIsRunning = true;
-			//	break;
+			case SDLK_RETURN:
+				//Start the game
+				SwitchToScene(sceneList[1]);
+				break;
 			case SDLK_SPACE:
 				// jump
 				if (currentScene->state.player->collidedBottom) {
+					Mix_PlayChannel(-1, bounce, 0);
 					currentScene->state.player->jump = true;
 				}
 				break;
@@ -181,57 +187,6 @@ void Update() {
 	}
 }
 
-void DrawText(ShaderProgram *program, GLuint fontTextureID, std::string text, float size, float spacing, glm::vec3 position) {
-	float width = 1.0f / 16.0f;
-	float height = 1.0f / 16.0f;
-
-	std::vector<float> vertices;
-	std::vector<float> texCoords;
-
-	for (int i = 0; i < text.size(); i++) {
-		int index = (int)text[i];
-		float offset = (size + spacing) * i;
-		float u = (float)(index % 16) / 16.0f;
-		float v = (float)(index / 16) / 16.0f;
-
-		vertices.insert(vertices.end(), {
-			offset + (-0.5f * size), 0.5f * size,
-			offset + (-0.5f * size), -0.5f * size,
-			offset + (0.5f * size), 0.5f * size,
-			offset + (0.5f * size), -0.5f * size,
-			offset + (0.5f * size), 0.5f * size,
-			offset + (-0.5f * size), -0.5f * size, });
-
-		texCoords.insert(texCoords.end(), {
-			u, v,
-			u, v + height,
-			u + width, v,
-			u + width, v + height,
-			u + width, v,
-			u, v + height,
-			});
-
-	}
-
-	glm::mat4 modelMatrix = glm::mat4(1.0f);
-	modelMatrix = glm::translate(modelMatrix, position);
-	program->SetModelMatrix(modelMatrix);
-
-	glUseProgram(program->programID);
-
-	glVertexAttribPointer(program->positionAttribute, 2, GL_FLOAT, false, 0, vertices.data());
-	glEnableVertexAttribArray(program->positionAttribute);
-
-	glVertexAttribPointer(program->texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords.data());
-	glEnableVertexAttribArray(program->texCoordAttribute);
-
-	glBindTexture(GL_TEXTURE_2D, fontTextureID);
-	glDrawArrays(GL_TRIANGLES, 0, (int)(text.size() * 6));
-
-	glDisableVertexAttribArray(program->positionAttribute);
-	glDisableVertexAttribArray(program->texCoordAttribute);
-}
-
 void Render() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -239,25 +194,32 @@ void Render() {
 
 	currentScene->Render(&program);
 
-	DrawText(&program, fontTextureID, "Lives: " + std::to_string(currentScene ->state.player->lives), 0.5f, -0.1f, glm::vec3(2.0, 1.0, 0));
-
-	/*if (currentScene == sceneList[0]) {
-		DrawText(&program, fontTextureID, "Press Enter to Start", 0.5f, -0.1f, glm::vec3(0, 0, 0));
+	if (currentScene != sceneList[0]) {
+		Util::DrawText(&program, fontTextureID, "Lives: " + std::to_string(currentScene->state.player->lives), 0.5f, -0.1f, glm::vec3(7.0, -0.5, 0));
 	}
 
+	if (currentScene == sceneList[0]) {
+		Util::DrawText(&program, fontTextureID, "Don't get eaten!", 0.7f, -0.1f, glm::vec3(0.7, -2.9, 0));
+		Util::DrawText(&program, fontTextureID, "Press Enter to Start", 0.4f, -0.1f, glm::vec3(1.9, -3.5, 0));
+	}
+	
 	if (currentScene->state.player->lives == 0) {
-		DrawText(&program, fontTextureID, "Mission Failed", 0.5f, -0.1f, glm::vec3(-2.5, 1.0, 0));
+		Util::DrawText(&program, fontTextureID, "Mission Failed", 0.5f, -0.1f, glm::vec3(-2.5, 1.0, 0));
+		currentScene->state.player->isActive = false;
 	}
 
 	if (currentScene->state.player->winFlag) {
-		DrawText(&program, fontTextureID, "Mission Success!", 0.5f, -0.1f, glm::vec3(0));
-	}*/
+		Util::DrawText(&program, fontTextureID, "Mission Success!", 0.5f, -0.1f, glm::vec3(20,-3,0));
+	}
 
 	SDL_GL_SwapWindow(displayWindow);
 }
 
 
 void Shutdown() {
+	Mix_FreeChunk(bounce);
+	Mix_FreeMusic(music);
+
 	SDL_Quit();
 }
 

@@ -1,4 +1,4 @@
-﻿  main.cpp
-c:\users\notwe\source\repos\platformer\main.cpp(191): warning C4018: '<': signed/unsigned mismatch
-main.obj : error LNK2019: unresolved external symbol _Mix_OpenAudio referenced in function "void __cdecl Initialize(void)" (?Initialize@@YAXXZ)
-C:\Users\notwe\source\repos\platformer\Debug\platformer.exe : fatal error LNK1120: 1 unresolved externals
+﻿  Level2.cpp
+  Level3.cpp
+  Generating Code...
+  projectTemplate.vcxproj -> C:\Users\notwe\source\repos\platformer\Debug\platformer.exe

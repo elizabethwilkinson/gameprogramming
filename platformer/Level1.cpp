@@ -28,7 +28,7 @@ void Level1::Initialize() {
 	// Initialize Player
 	state.player = new Entity();
 	state.player->entityType = PLAYER;
-	state.player->position = glm::vec3(5, 0, 0);
+	state.player->position = glm::vec3(2, 0, 0);
 	state.player->movement = glm::vec3(0);
 	state.player->acceleration = glm::vec3(0, -9.81f, 0); //free fall gravity
 	state.player->speed = 1.5f;
@@ -47,46 +47,32 @@ void Level1::Initialize() {
 	state.player->animRows = 8;
 
 	state.player->height = 1.0f;
-	state.player->width = 1.0f;
+	state.player->width = 0.5f;
 
-	state.player->jumpPower = 6.0f;
-
-	//music = Mix_LoadMUS("music.mp3");
-	//Mix_PlayMusic(music,-1); //loop forever (use 0 to play track just 1 time)
-	//Mix_VolumeMusic(MIX_MAX_VOLUME/2); //ranges 0 (mute) to 128 (max volume)
-	//Mix_HaltMusic();
+	state.player->jumpPower = 7.0f;
 
 	//Initialize Enemies
 	state.enemies = new Entity[LEVEL1_ENEMY_COUNT];
 
 	GLuint enemyTextureID = Util::LoadTexture("polar-bear.png");
 
-	for (int i = 0; i < LEVEL1_ENEMY_COUNT; i++) {
-		state.enemies[i].entityType = ENEMY;
-		state.enemies[i].aiState = IDLE;
-		state.enemies[i].textureID = enemyTextureID;
-		state.enemies[i].height = 0.75;
-		state.enemies[i].speed = 1;
-		state.enemies[i].acceleration = glm::vec3(0, -9.81, 0);
-		state.enemies[i].isActive = false;
-	}
-
-	state.enemies[0].position = glm::vec3(4, -1.5, 0);
-	state.enemies[0].aiType = WAITANDGO;
-
-	/*state.enemies[1].position = glm::vec3(2.5, -1.5, 0);
-	state.enemies[1].aiType = JUMPER;
-	state.enemies[1].jumpPower = 3.0;
-
-	state.enemies[2].position = glm::vec3(1, -1.5, 0);
-	state.enemies[2].aiType = WALKER;*/
+	state.enemies[0].entityType = ENEMY;
+	state.enemies[0].aiType = WALKER;
+	//state.enemies[0].aiState = IDLE;
+	state.enemies[0].textureID = enemyTextureID;
+	state.enemies[0].height = 0.75;
+	state.enemies[0].speed = 1;
+	state.enemies[0].acceleration = glm::vec3(0, -9.81, 0);
+	state.enemies[0].position = glm::vec3(7, 0, 0);
 }
 
 void Level1::Update(float deltaTime) {
 	state.player->Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
 
+	state.enemies->Update(deltaTime, state.player, state.enemies, LEVEL1_ENEMY_COUNT, state.map);
+
 	if (state.player->position.x >= 12) {
-		state.nextScene = 1;
+		state.nextScene = 2;
 	}
 }
 
