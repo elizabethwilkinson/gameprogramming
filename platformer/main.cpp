@@ -85,7 +85,7 @@ void Initialize() {
 	music = Mix_LoadMUS("wallpaper.mp3");
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 	Mix_PlayMusic(music,-1); //loop forever (use 0 to play track just 1 time)
-	//Mix_VolumeMusic(MIX_MAX_VOLUME/2); //ranges 0 (mute) to 128 (max volume)
+	Mix_VolumeMusic(MIX_MAX_VOLUME/2); //ranges 0 (mute) to 128 (max volume)
 	//Mix_HaltMusic();
 
 	bounce = Mix_LoadWAV("birds040.wav");

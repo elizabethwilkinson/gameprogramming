@@ -1,0 +1,16 @@
+﻿  Entity.cpp
+  Level1.cpp
+  Level2.cpp
+  Level3.cpp
+C:\Users\minsu\Documents\gameprogramming\platformer\Level3.cpp(64,31): warning C4305: '=': truncation from 'double' to 'float'
+  main.cpp
+  Map.cpp
+C:\Users\minsu\Documents\gameprogramming\platformer\Map.cpp(88,13): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\minsu\Documents\gameprogramming\platformer\Map.cpp(89,13): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Menu.cpp
+  Scene.cpp
+  ShaderProgram.cpp
+  Util.cpp
+C:\Users\minsu\Documents\gameprogramming\platformer\Util.cpp(34,20): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  SDLProject.vcxproj -> C:\Users\minsu\Documents\gameprogramming\platformer\Debug\SDLProject.exe

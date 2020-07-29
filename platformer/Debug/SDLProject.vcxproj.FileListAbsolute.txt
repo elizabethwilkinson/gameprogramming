@@ -1,0 +1,6 @@
+C:\Users\minsu\Documents\Grading\Sample - Copy\Debug\SDLProject.exe
+C:\Users\minsu\Documents\Grading\Sample - Copy\Debug\SDLProject.pdb
+C:\Users\minsu\Documents\Grading\platformer\Debug\SDLProject.exe
+C:\Users\minsu\Documents\Grading\platformer\Debug\SDLProject.pdb
+C:\Users\minsu\Documents\gameprogramming\platformer\Debug\SDLProject.exe
+C:\Users\minsu\Documents\gameprogramming\platformer\Debug\SDLProject.pdb
